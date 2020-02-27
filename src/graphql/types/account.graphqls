@@ -1,0 +1,23 @@
+type Account {
+  id: ID!
+  avatar: String
+  displayName: String
+  username: String
+  locale: String
+  followersCount: Int
+  followingCount: Int
+  statusesCount: Int
+  note: String
+  createdAt: String
+
+  # Don't see this in user data?
+  email: String
+
+  # Only used during registration
+  # nickname: String
+  # fullname: String
+  # agreement: Boolean
+  # password: String
+  # passwordConfirmation: String
+}
+

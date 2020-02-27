@@ -1,0 +1,49 @@
+type Status {
+  id: ID!
+  account: Account
+  spoilerText: String
+  content: String
+  createdAt: String
+  favourited: Boolean
+  favouritesCount: Int
+  inReplyToAccountId: String
+  inReplyToId: String
+  muted: Boolean
+  pinned: Boolean
+  reblogged: Boolean
+  reblogsCount: Int
+  repliesCount: Int
+  uri: String
+  visibility: String
+}
+
+input StatusInput {
+  status: String!
+  mediaIds: [Int]
+  inReplyToId: ID
+  sensitive: Boolean
+  spoilerText: String
+  visibility: String
+  scheduledAt: String
+  language: String
+}
+
+type Query {
+  publicTimeline(
+    # TODO: Remove default values here
+    local: Boolean
+    all: Boolean
+    onlyMedia: Boolean
+    maxId: String
+    sinceId: String
+    minId: String
+    limit: Int
+  ): [Status]
+  homeTimeline: [Status]
+  accountStatuses(userId: ID!): [Status]
+  status(id: ID!): Status
+}
+
+type Mutation {
+  publishStatus(input: StatusInput): Status
+}
