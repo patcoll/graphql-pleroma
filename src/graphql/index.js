@@ -23,7 +23,6 @@ if (canUseDOM) {
     .keys()
     .map(path => {
       const object = typesContext(path).default;
-      // return [normalizePath(path), object];
       return object;
     });
 
@@ -42,9 +41,7 @@ if (canUseDOM) {
   graphql.typeDefs = glob
     .sync(path.join(__dirname, 'types/**/*'))
     .map(path => {
-      // const normalizedPath = normalizePath(path).replace(/^\/?types\/?/, '');
       const object = fs.readFileSync(path, 'utf8');
-      // return [normalizedPath, object];
       return object;
     });
 
@@ -59,12 +56,6 @@ if (canUseDOM) {
       return [normalizedPath, doc];
     });
 }
-
-// graphql.typeDefs = graphql.typeDefs
-//   .reduce((memo, [key, value]) => {
-//     memo[key] = value;
-//     return memo;
-//   }, {});
 
 graphql.queries = graphql.queries
   .reduce((memo, [key, value]) => {
