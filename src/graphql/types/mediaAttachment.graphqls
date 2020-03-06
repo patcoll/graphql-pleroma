@@ -1,0 +1,18 @@
+type MediaAttachment {
+  id: ID!
+  description: String
+  previewUrl: String
+  remoteUrl: String
+  textUrl: String
+  type: String
+  url: String
+  pleroma: MediaAttachmentMeta
+}
+
+type MediaAttachmentMeta {
+  mimeType: String
+}
+
+input MediaAttachmentInput {
+  file: String
+}

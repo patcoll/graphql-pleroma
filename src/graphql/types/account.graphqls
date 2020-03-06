@@ -1,17 +1,32 @@
 type Account {
   id: ID!
-  avatar: String
-  displayName: String
+  pleroma: AccountMeta
+
   username: String
-  locale: String
+  acct: String
+  displayName: String
+
+  locked: Boolean
+  bot: Boolean
+  createdAt: String
+  note: String
+  url: String
+
+  avatar: String
+  avatarStatic: String
+  header: String
+  headerStatic: String
+
   followersCount: Int
   followingCount: Int
   statusesCount: Int
-  note: String
-  createdAt: String
+  lastStatusAt: String
 
   # Don't see this in user data?
-  email: String
+  # locale: String
+
+  # Don't see this in user data?
+  # email: String
 
   # Only used during registration
   # nickname: String
@@ -19,5 +34,47 @@ type Account {
   # agreement: Boolean
   # password: String
   # passwordConfirmation: String
+
+  statuses(
+    onlyMedia: Boolean
+    minId: String
+  ): [Status]
+
+  followers: [Account]
 }
 
+type AccountMeta {
+  backgroundImage: String
+  confirmationPending: Boolean
+  hideFavorites: Boolean
+  hideFollowers: Boolean
+  hideFollowersCount: Boolean
+  hideFollows: Boolean
+  hideFollowsCount: Boolean
+  isAdmin: Boolean
+  isModerator: Boolean
+  relationship: Relationship
+  skipThreadContainment: Boolean
+  tags: [String]
+}
+
+type Relationship {
+  id: ID
+  following: Boolean
+  showingReblogs: Boolean
+  followedBy: Boolean
+  blocking: Boolean
+  blockedBy: Boolean
+  muting: Boolean
+  mutingNotifications: Boolean
+  requested: Boolean
+  domainBlocking: Boolean
+  endorsed: Boolean
+}
+
+type Query {
+  account(id: ID!): Account
+}
+
+# type Mutation {
+# }

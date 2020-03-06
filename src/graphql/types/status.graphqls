@@ -1,6 +1,7 @@
 type Status {
   id: ID!
   account: Account
+  mediaAttachments: [MediaAttachment]
   spoilerText: String
   content: String
   createdAt: String
@@ -30,7 +31,6 @@ input StatusInput {
 
 type Query {
   publicTimeline(
-    # TODO: Remove default values here
     local: Boolean
     all: Boolean
     onlyMedia: Boolean
@@ -38,9 +38,11 @@ type Query {
     sinceId: String
     minId: String
     limit: Int
+    withMuted: Boolean
   ): [Status]
+
   homeTimeline: [Status]
-  accountStatuses(userId: ID!): [Status]
+
   status(id: ID!): Status
 }
 

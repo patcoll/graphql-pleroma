@@ -1,20 +1,8 @@
 /* eslint-disable import/no-webpack-loader-syntax */
 const { canUseDOM } = require('exenv');
-const {
-  mergeSchemas,
-  addResolveFunctionsToSchema,
-} = require('graphql-tools');
-const resolvers = require('./resolvers');
-
-function normalizePath(path) {
-  let normalizedPath = path
-    .replace(/^\.\//, '')
-    .replace(/\.(graphqls?|gqls?)$/i, '');
-  if (normalizedPath.indexOf(__dirname) === 0) {
-    normalizedPath = normalizedPath.slice(__dirname.length);
-  }
-  return normalizedPath;
-}
+const { mergeSchemas } = require('graphql-tools');
+const { resolvers } = require('./resolvers');
+const { normalizePath } = require('./util');
 
 let graphql = {};
 
@@ -35,23 +23,16 @@ if (canUseDOM) {
     .keys()
     .map(path => {
       const object = typesContext(path).default;
-      return [normalizePath(path), object];
-    })
-    .reduce((memo, entry) => {
-      memo[entry[0]] = entry[1];
-      return memo;
-    }, {});
+      // return [normalizePath(path), object];
+      return object;
+    });
 
   graphql.queries = queriesContext
     .keys()
     .map(path => {
       const object = queriesContext(path);
       return [normalizePath(path), object];
-    })
-    .reduce((memo, entry) => {
-      memo[entry[0]] = entry[1];
-      return memo;
-    }, {});
+    });
 } else {
   const fs = require('fs');
   const path = require('path');
@@ -61,14 +42,11 @@ if (canUseDOM) {
   graphql.typeDefs = glob
     .sync(path.join(__dirname, 'types/**/*'))
     .map(path => {
-      const normalizedPath = normalizePath(path).replace(/^\/?types\/?/, '');
+      // const normalizedPath = normalizePath(path).replace(/^\/?types\/?/, '');
       const object = fs.readFileSync(path, 'utf8');
-      return [normalizedPath, object];
-    })
-    .reduce((memo, entry) => {
-      memo[entry[0]] = entry[1];
-      return memo;
-    }, {});
+      // return [normalizedPath, object];
+      return object;
+    });
 
   graphql.queries = glob
     .sync(path.join(__dirname, 'queries/**/*'))
@@ -79,20 +57,39 @@ if (canUseDOM) {
         ${content}
       `;
       return [normalizedPath, doc];
-    })
-    .reduce((memo, entry) => {
-      memo[entry[0]] = entry[1];
-      return memo;
-    }, {});
+    });
 }
 
-graphql.schema = mergeSchemas({
-  schemas: Object.values(graphql.typeDefs),
-});
+// graphql.typeDefs = graphql.typeDefs
+//   .reduce((memo, [key, value]) => {
+//     memo[key] = value;
+//     return memo;
+//   }, {});
 
-addResolveFunctionsToSchema({
-  schema: graphql.schema,
+graphql.queries = graphql.queries
+  .reduce((memo, [key, value]) => {
+    memo[key] = value;
+    return memo;
+  }, {});
+
+graphql.resolvers = resolvers;
+
+const realSchema = mergeSchemas({
+  schemas: Object.values(graphql.typeDefs),
   resolvers,
 });
+
+// TODO: Mock out everything we haven't defined yet.
+// const introspectionQueryResult = graphqlSync(
+//   realSchema,
+//   introspectionQuery,
+// );
+// const introspectionSchema = buildClientSchema(introspectionQueryResult.data);
+// addMockFunctionsToSchema({ schema: introspectionSchema });
+// const schema = mergeSchemas({
+//   schemas: [introspectionSchema, realSchema],
+// });
+
+graphql.schema = realSchema;
 
 module.exports = graphql;
