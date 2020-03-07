@@ -57,11 +57,7 @@ if (canUseDOM) {
     });
 }
 
-graphql.queries = graphql.queries
-  .reduce((memo, [key, value]) => {
-    memo[key] = value;
-    return memo;
-  }, {});
+graphql.queries = Object.fromEntries(graphql.queries);
 
 graphql.resolvers = resolvers;
 
