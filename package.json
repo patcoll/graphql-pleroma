@@ -8,7 +8,7 @@
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "apollo-server-express": "^2.10.1",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "camelcase-keys": "^6.1.2",
     "exenv": "^1.2.2",
     "express": "^4.17.1",
