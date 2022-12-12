@@ -11,7 +11,7 @@
     "axios": "^0.19.2",
     "camelcase-keys": "^6.1.2",
     "exenv": "^1.2.2",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "glob": "^7.1.6",
     "graphql-middleware": "^4.0.2",
     "graphql-tools": "^4.0.7",
